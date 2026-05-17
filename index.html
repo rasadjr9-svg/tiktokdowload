@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>C1 MOD | TikTok Downloader • Rasyad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: radial-gradient(circle at 20% 30%, #0A0C15, #020408);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding: 1rem;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 40% 60%, rgba(0,245,255,0.06), rgba(168,85,247,0.06));
+            pointer-events: none;
+            z-index: 0;
+            animation: pulse 8s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.3; }
+        }
+        .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+        .premium-card {
+            background: rgba(10, 15, 25, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 2.5rem;
+            border: 1px solid rgba(0, 255, 255, 0.25);
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        }
+        .card-header {
+            background: linear-gradient(135deg, #0f1622, #0a0e18);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 245, 255, 0.25);
+            position: relative;
+        }
+        .card-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 20%;
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00f5ff, #a855f7, #fbbf24, transparent);
+            border-radius: 2px;
+        }
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00f5ff, #a855f7, #fbbf24);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 4s ease infinite;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .owner-name {
+            margin-top: 0.6rem;
+            font-size: 0.85rem;
+            color: #fbbf24;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+        .owner-name i { color: #00f5ff; margin-right: 6px; }
+        .badge-premium {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(0,245,255,0.15), rgba(168,85,247,0.15));
+            border: 1px solid rgba(0,245,255,0.5);
+            border-radius: 40px;
+            padding: 0.3rem 1.2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #00f5ff;
+            margin-top: 1rem;
+        }
+        .tabs-container { padding: 1.2rem 1.8rem 0; background: rgba(0, 0, 0, 0.2); }
+        .tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 2.5rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #9ab3d4;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tab-btn:hover { color: white; background: rgba(255, 255, 255, 0.05); transform: translateY(-2px); }
+        .tab-btn.active {
+            background: linear-gradient(135deg, rgba(0,245,255,0.2), rgba(168,85,247,0.2));
+            color: #00f5ff;
+            border: 1px solid rgba(0,245,255,0.5);
+            box-shadow: 0 0 15px rgba(0,245,255,0.2);
+        }
+        .card-content { padding: 1.8rem; }
+        .input-group { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
+        label { font-weight: 600; color: #cbdff7; font-size: 0.85rem; margin-left: 0.5rem; display: flex; align-items: center; gap: 8px; }
+        .input-wrapper { background: rgba(0, 0, 0, 0.4); border-radius: 1.2rem; padding: 0.1rem; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.2s; }
+        .input-wrapper:focus-within { border-color: #00f5ff; box-shadow: 0 0 15px rgba(0,245,255,0.15); }
+        input { background: rgba(0, 0, 0, 0.5); border: none; border-radius: 1.1rem; padding: 1rem 1.2rem; font-size: 0.9rem; color: white; font-family: monospace; outline: none; width: 100%; }
+        .btn-primary {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 3rem;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0,114,255,0.3);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,114,255,0.4); }
+        .result-area { margin-top: 2rem; background: rgba(0, 0, 0, 0.35); border-radius: 1.5rem; padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.3s; }
+        .media-preview { display: flex; flex-direction: column; gap: 1.2rem; }
+        .quality-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(0,245,255,0.15), rgba(168,85,247,0.15));
+            border-radius: 2rem;
+            padding: 0.3rem 1rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #00f5ff;
+        }
+        video, img { max-width: 100%; border-radius: 1rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3); background: #000; }
+        video { max-height: 450px; width: 100%; }
+        audio { width: 100%; border-radius: 2rem; }
+        .download-buttons { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.5rem; justify-content: center; }
+        .download-btn {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            padding: 0.7rem 1.5rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            border: 1px solid rgba(255,255,255,0.12);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .download-btn:hover { background: linear-gradient(135deg, #00c6ff, #0072ff); transform: scale(1.02); }
+        .error-message { background: rgba(220,38,38,0.12); border-left: 3px solid #ef4444; padding: 1rem; border-radius: 1rem; color: #fca5a5; font-size: 0.85rem; }
+        .feature-grid { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.5rem; justify-content: center; }
+        .feature-chip { background: rgba(255,255,255,0.04); border-radius: 2rem; padding: 0.3rem 1rem; font-size: 0.7rem; color: #9ab3d4; }
+        footer { text-align: center; padding: 1.2rem; font-size: 0.65rem; color: #5a7a9a; border-top: 1px solid rgba(255,255,255,0.04); }
+        .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @media (max-width: 600px) { body { padding: 0.8rem; } .tab-btn { padding: 0.5rem 1rem; font-size: 0.7rem; } .logo { font-size: 1.8rem; } }
+        .photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .photo-card { background: rgba(0,0,0,0.4); border-radius: 1rem; padding: 0.8rem; text-align: center; }
+        .photo-card img { width: 100%; border-radius: 0.8rem; max-height: 200px; object-fit: cover; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="premium-card">
+        <div class="card-header">
+            <div class="logo">⚡ C1 MOD • TIKTOK DL ⚡</div>
+            <div class="logo-sub">NO WATERMARK • 4K READY • MULTI FORMAT</div>
+            <div class="owner-name"><i class="fas fa-crown"></i> OWNER: RASYAD <i class="fas fa-code-branch"></i></div>
+            <div class="badge-premium">🎵 VIDEO • 📸 FOTO • 🎧 AUDIO • ℹ️ METADATA</div>
+        </div>
+
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab-btn active" data-mode="video"><i class="fab fa-tiktok"></i> Video HD</button>
+                <button class="tab-btn" data-mode="foto"><i class="fas fa-image"></i> Foto / Slideshow</button>
+                <button class="tab-btn" data-mode="audio"><i class="fas fa-music"></i> Audio MP3</button>
+                <button class="tab-btn" data-mode="metadata"><i class="fas fa-chart-simple"></i> Metadata</button>
+            </div>
+        </div>
+
+        <div class="card-content">
+            <div class="input-group">
+                <label><i class="fab fa-tiktok"></i> 🔗 TIKTOK URL (VIDEO / FOTO / SLIDESHOW)</label>
+                <div class="input-wrapper">
+                    <input type="text" id="tiktokUrl" placeholder="https://www.tiktok.com/@username/video/123456789...">
+                </div>
+            </div>
+            <button id="processBtn" class="btn-primary">
+                <i class="fas fa-download"></i> DOWNLOAD SEKARANG <i class="fas fa-bolt"></i>
+            </button>
+
+            <div id="resultArea" class="result-area">
+                <div style="text-align: center; color: #7e95b5;">
+                    <i class="fas fa-music"></i> Pilih mode, masukkan link TikTok, klik download
+                </div>
+            </div>
+
+            <div class="feature-grid">
+                <span class="feature-chip"><i class="fas fa-water"></i> No Watermark</span>
+                <span class="feature-chip"><i class="fas fa-hd"></i> Full HD / 4K</span>
+                <span class="feature-chip"><i class="fas fa-images"></i> Multiple Photos</span>
+                <span class="feature-chip"><i class="fas fa-headphones"></i> 320kbps Audio</span>
+                <span class="feature-chip"><i class="fas fa-bolt"></i> Fast Processing</span>
+                <span class="feature-chip"><i class="fas fa-crown"></i> Rasyad</span>
+            </div>
+        </div>
+        <footer>C1 MOD • TikTok Downloader Ultimate • 100% Working • Created by Rasyad</footer>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const API_URL = "https://tikwm.com/api/";
+        let currentMode = "video";
+
+        const tabs = document.querySelectorAll('.tab-btn');
+        const urlInput = document.getElementById('tiktokUrl');
+        const processBtn = document.getElementById('processBtn');
+        const resultArea = document.getElementById('resultArea');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentMode = tab.dataset.mode;
+                let msg = '';
+                if (currentMode === 'video') msg = '🎬 Mode Video 4K/HD — siap download video TikTok tanpa watermark';
+                else if (currentMode === 'foto') msg = '🖼️ Mode Foto — download satu per satu (klik SIMPAN di setiap foto)';
+                else if (currentMode === 'audio') msg = '🎵 Mode Audio Studio — ekstrak MP3 kualitas tinggi';
+                else msg = 'ℹ️ Mode Metadata — lihat info lengkap video TikTok';
+                resultArea.innerHTML = `<div style="text-align:center; color:#7e95b5;">${msg}</div>`;
+            });
+        });
+
+        function escapeHtml(str) {
+            if(!str) return '';
+            return String(str).replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' }[m]));
+        }
+
+        function cleanUrl(raw) {
+            raw = raw.trim();
+            if(!raw) return '';
+            let match = raw.match(/tiktok\.com\/@[\w.-]+\/(?:video|photo)\/(\d+)/i);
+            if(match) {
+                let type = raw.includes('/video/') ? 'video' : 'photo';
+                return `https://www.tiktok.com/@user/${type}/${match[1]}`;
+            }
+            return raw;
+        }
+
+        async function fetchData(url) {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `url=${encodeURIComponent(url)}`
+            });
+            if(!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            if(data.code !== 0) throw new Error(data.msg || "Gagal mengambil data");
+            return data;
+        }
+
+        function getBestVideo(data) {
+            let videoUrl = data.data?.hdplay || data.data?.play;
+            if(!videoUrl) throw new Error("Video URL tidak tersedia");
+            let quality = "HD (≥720p)";
+            if(videoUrl.includes("1080") || videoUrl.includes("1920")) quality = "Full HD 1080p";
+            if(videoUrl.includes("2160") || videoUrl.includes("4k")) quality = "4K ULTRA";
+            return { url: videoUrl, quality };
+        }
+
+        function renderVideo(data) {
+            const { url, quality } = getBestVideo(data);
+            const title = data.data?.title || "TikTok Video";
+            const author = data.data?.author?.unique_id || "Unknown";
+            const duration = data.data?.duration || "N/A";
+            return `
+                <div class="media-preview">
+                    <div><span class="quality-tag">🎥 ${quality} • NO WATERMARK</span></div>
+                    <video controls src="${escapeHtml(url)}" style="width:100%;"></video>
+                    <div class="download-buttons">
+                        <a href="${escapeHtml(url)}" download="c1mod_video_${Date.now()}.mp4" class="download-btn">⬇️ DOWNLOAD VIDEO (${quality})</a>
+                    </div>
+                    <div style="font-size:0.8rem; color:#9ab3d4;">📝 ${escapeHtml(title.substring(0, 100))}<br>👤 @${escapeHtml(author)} | ⏱️ ${duration}s</div>
+                </div>
+            `;
+        }
+
+        function renderFoto(data) {
+            const images = data.data?.images;
+            if(!images || images.length === 0) throw new Error("Tidak ada gambar — pastikan link adalah foto/slideshow");
+            
+            let html = `<div><span class="quality-tag">📸 ${images.length} GAMBAR • ORIGINAL QUALITY (UP TO 4K)</span></div>`;
+            html += `<div class="photo-grid">`;
+            
+            images.forEach((img, idx) => {
+                let qualityHint = "HD";
+                if(img.includes("1080")) qualityHint = "Full HD";
+                if(img.includes("2048") || img.includes("1440")) qualityHint = "2K/4K";
+                html += `
+                    <div class="photo-card">
+                        <img src="${escapeHtml(img)}" loading="lazy">
+                        <div style="margin-top:0.5rem;"><span class="quality-tag" style="font-size:0.6rem;">${qualityHint}</span></div>
+                        <a href="${escapeHtml(img)}" download="c1mod_photo_${Date.now()}_${idx+1}.jpg" class="download-btn" style="display:inline-block; margin-top:0.6rem; padding:0.4rem 1rem; font-size:0.7rem;">💾 SIMPAN</a>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            html += `<div class="info-message" style="margin-top:1rem; padding:0.8rem; background:rgba(0,0,0,0.4); border-radius:1rem; font-size:0.7rem; text-align:center; color:#9ab3d4;">
+                        <i class="fas fa-info-circle"></i> Klik tombol SIMPAN pada setiap foto untuk mendownload satu per satu.
+                    </div>`;
+            
+            return html;
+        }
+
+        function renderAudio(data) {
+            const musicUrl = data.data?.music;
+            if(!musicUrl) throw new Error("Audio tidak tersedia");
+            const title = data.data?.title || "TikTok Audio";
+            const author = data.data?.author?.unique_id || "";
+            return `
+                <div class="media-preview">
+                    <div><span class="quality-tag">🎵 AUDIO MP3 • HIGH BITRATE</span></div>
+                    <audio controls src="${escapeHtml(musicUrl)}" style="width:100%;"></audio>
+                    <div class="download-buttons">
+                        <a href="${escapeHtml(musicUrl)}" download="c1mod_audio_${Date.now()}.mp3" class="download-btn">🎧 DOWNLOAD MP3</a>
+                    </div>
+                    <div style="font-size:0.8rem;">🎤 ${escapeHtml(title)} — @${escapeHtml(author)}</div>
+                </div>
+            `;
+        }
+
+        function renderMetadata(data) {
+            const info = data.data;
+            if(!info) throw new Error("Metadata tidak ditemukan");
+            const author = info.author || {};
+            const stats = info.statistics || {};
+            return `
+                <div class="media-preview">
+                    <div><span class="quality-tag">ℹ️ METADATA LENGKAP</span></div>
+                    <div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.85rem;">
+                        <p><strong>📌 Judul:</strong> ${escapeHtml(info.title || '-')}</p>
+                        <p><strong>👤 Author:</strong> @${escapeHtml(author.unique_id || '-')} (${escapeHtml(author.nickname || '-')})</p>
+                        <p><strong>❤️ Likes:</strong> ${stats.digg_count || 0} | 💬 Comments: ${stats.comment_count || 0} | 🔁 Shares: ${stats.share_count || 0}</p>
+                        <p><strong>📅 Upload:</strong> ${info.create_time ? new Date(info.create_time*1000).toLocaleString() : '-'}</p>
+                        <p><strong>🎬 Duration:</strong> ${info.duration || 0} detik</p>
+                        ${info.cover ? `<img src="${escapeHtml(info.cover)}" style="max-width:200px; border-radius:1rem; margin-top:0.5rem;">` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        async function process() {
+            let rawUrl = urlInput.value.trim();
+            if(!rawUrl) {
+                resultArea.innerHTML = `<div class="error-message">❌ Masukkan link TikTok terlebih dahulu.</div>`;
+                return;
+            }
+            if(!rawUrl.includes('tiktok.com')) {
+                resultArea.innerHTML = `<div class="error-message">❌ Link harus dari TikTok (tiktok.com atau vt.tiktok.com)</div>`;
+                return;
+            }
+
+            resultArea.innerHTML = `<div style="text-align:center; color:#00f5ff;"><span class="loading-spinner"></span> ⏳ C1 Mod Engine memproses...</div>`;
+            try {
+                const cleaned = cleanUrl(rawUrl);
+                const apiData = await fetchData(cleaned);
+                let html = '';
+                if(currentMode === 'video') {
+                    if(!apiData.data?.play && !apiData.data?.hdplay) throw new Error("Konten bukan video.");
+                    html = renderVideo(apiData);
+                } else if(currentMode === 'foto') {
+                    html = renderFoto(apiData);
+                } else if(currentMode === 'audio') {
+                    html = renderAudio(apiData);
+                } else if(currentMode === 'metadata') {
+                    html = renderMetadata(apiData);
+                }
+                resultArea.innerHTML = html;
+            } catch(err) {
+                resultArea.innerHTML = `<div class="error-message">⚠️ ERROR: ${escapeHtml(err.message)}<br>💡 Pastikan mode sesuai tipe konten (video/foto/audio) dan link publik.</div>`;
+            }
+        }
+
+        processBtn.addEventListener('click', process);
+        urlInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') process(); });
+    })();
+</script>
+</body>
+</html>
